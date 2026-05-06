@@ -9,16 +9,30 @@ public class Incident implements Parcelable {
 
     private VehiculeType vehiculeType;
     private String adresse;
+    private double distanceKm;
+    private float status;
 
     public Incident(VehiculeType vehiculeType, String adresse) {
+        this(vehiculeType, adresse, 0.0, 0.0f);
+    }
+
+    public Incident(VehiculeType vehiculeType, String adresse, double distanceKm) {
+        this(vehiculeType, adresse, distanceKm, 0.0f);
+    }
+
+    public Incident(VehiculeType vehiculeType, String adresse, double distanceKm, float status) {
         this.vehiculeType = vehiculeType;
         this.adresse = adresse;
+        this.distanceKm = distanceKm;
+        this.status = status;
     }
 
     protected Incident(Parcel in) {
         String vehiculeTypeName = in.readString();
         vehiculeType = vehiculeTypeName == null ? null : VehiculeType.valueOf(vehiculeTypeName);
         adresse = in.readString();
+        distanceKm = in.readDouble();
+        status = in.readFloat();
     }
 
     public static final Creator<Incident> CREATOR = new Creator<Incident>() {
@@ -50,7 +64,27 @@ public class Incident implements Parcelable {
     }
 
     public double getDistance(String coord) {
+        if (distanceKm > 0.0) {
+            return distanceKm;
+        }
+
         return ThreadLocalRandom.current().nextDouble(1.0, 20.0);
+    }
+
+    public double getDistanceKm() {
+        return distanceKm;
+    }
+
+    public void setDistanceKm(double distanceKm) {
+        this.distanceKm = distanceKm;
+    }
+
+    public float getStatus() {
+        return status;
+    }
+
+    public void setStatus(float status) {
+        this.status = status;
     }
 
     @Override
@@ -62,5 +96,7 @@ public class Incident implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(vehiculeType == null ? null : vehiculeType.name());
         dest.writeString(adresse);
+        dest.writeDouble(distanceKm);
+        dest.writeFloat(status);
     }
 }

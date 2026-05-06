@@ -1,39 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="96dp"
+    android:layout_height="118dp"
     android:background="?attr/selectableItemBackground"
-    android:paddingStart="12dp"
+    android:paddingStart="8dp"
     android:paddingTop="10dp"
-    android:paddingEnd="12dp"
-    android:paddingBottom="10dp">
+    android:paddingEnd="8dp"
+    android:paddingBottom="8dp">
 
     <ImageView
         android:id="@+id/incidentIcon"
-        android:layout_width="58dp"
-        android:layout_height="58dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:contentDescription="@null"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.15"
+        tools:src="@drawable/ic_vehicle_car" />
 
     <TextView
         android:id="@+id/incidentTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="10dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="@android:color/black"
         android:textSize="26sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/incidentAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/incidentIcon"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintTop_toTopOf="@id/incidentIcon"
+        tools:text="Voiture - 2 km" />
 
     <TextView
         android:id="@+id/incidentAddress"
@@ -43,9 +45,22 @@
         android:maxLines="1"
         android:textColor="@android:color/black"
         android:textSize="21sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/incidentTitle"
-        app:layout_constraintTop_toBottomOf="@id/incidentTitle" />
+        app:layout_constraintTop_toBottomOf="@id/incidentTitle"
+        tools:text="13 rue du bonheur" />
+
+    <RatingBar
+        android:id="@+id/incidentStatus"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:isIndicator="false"
+        android:numStars="5"
+        android:stepSize="1"
+        app:layout_constraintStart_toStartOf="@id/incidentTitle"
+        app:layout_constraintTop_toBottomOf="@id/incidentAddress"
+        tools:rating="3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

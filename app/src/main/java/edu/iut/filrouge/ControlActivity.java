@@ -70,9 +70,11 @@ public class ControlActivity extends AppCompatActivity implements Notifiable, Me
     }
 
     @Override
-    public void onDataChange(int numFragment, Object object) {
-        if (numFragment == Screen2Fragment.FRAGMENT_ID && object instanceof String) {
-            Fragment fragment = Screen1Fragment.newInstance((String) object);
+    public void onDataChange(int numFragment, Object object, int actionCode, Object argsAction) {
+        if (numFragment == Screen2Fragment.FRAGMENT_ID
+                && actionCode == Screen2Fragment.ACTION_OPEN_DETAILS
+                && object instanceof Incident) {
+            Fragment fragment = Screen1Fragment.newInstance((Incident) object);
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.screenFragmentContainer, fragment);
@@ -84,6 +86,16 @@ public class ControlActivity extends AppCompatActivity implements Notifiable, Me
             FragmentTransaction transactionMenu = getSupportFragmentManager().beginTransaction();
             transactionMenu.replace(R.id.menuFragmentContainer, MenuFragment.newInstance(menuActif));
             transactionMenu.commit();
+            return;
+        }
+
+        if (numFragment == Screen2Fragment.FRAGMENT_ID
+                && actionCode == Screen2Fragment.ACTION_STATUS_CHANGED
+                && object instanceof Incident) {
+            Incident incident = (Incident) object;
+            Log.d("ControlActivity", "Statut modifié : "
+                    + incident.getVehiculeType().getVehiculeName()
+                    + " = " + incident.getStatus());
             return;
         }
 
@@ -105,6 +117,11 @@ public class ControlActivity extends AppCompatActivity implements Notifiable, Me
             transactionMenu.replace(R.id.menuFragmentContainer, MenuFragment.newInstance(menuActif));
             transactionMenu.commit();
         }
+    }
+
+    @Override
+    public void onFragmentDisplayed(int fragmentId) {
+        Log.d("ControlActivity", "Fragment affiché : " + fragmentId);
     }
 
     @Override

@@ -3,45 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context=".Screen2Fragment">
 
-    <ImageView
+    <ListView
+        android:id="@+id/list_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="@null"
-        android:scaleType="centerCrop"
-        android:src="@drawable/fond" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#A0FF8C00" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#80E6C39A"
-            android:gravity="start"
-            android:padding="10dp"
-            android:text="Liste des incidents"
-            android:textColor="@android:color/white"
-            android:textSize="26sp" />
-
-        <ListView
-            android:id="@+id/list_item"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="#CCFFFFFF"
-            android:divider="#FFE6C39A"
-            android:dividerHeight="1dp" />
-
-    </LinearLayout>
+        android:background="@android:color/white"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="#C8C8C8"
+        android:dividerHeight="1dp" />
 
 </FrameLayout>
