@@ -71,6 +71,22 @@ public class ControlActivity extends AppCompatActivity implements Notifiable, Me
 
     @Override
     public void onDataChange(int numFragment, Object object) {
+        if (numFragment == Screen2Fragment.FRAGMENT_ID && object instanceof String) {
+            Fragment fragment = Screen1Fragment.newInstance((String) object);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.screenFragmentContainer, fragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
+            menuActif = Screen1Fragment.FRAGMENT_ID;
+
+            FragmentTransaction transactionMenu = getSupportFragmentManager().beginTransaction();
+            transactionMenu.replace(R.id.menuFragmentContainer, MenuFragment.newInstance(menuActif));
+            transactionMenu.commit();
+            return;
+        }
+
         if (numFragment >= 0 && numFragment < FRAGMENT_COUNT) {
             Fragment fragment = createFragment(numFragment);
 

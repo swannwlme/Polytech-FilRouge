@@ -8,6 +8,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="@null"
         android:scaleType="centerCrop"
         android:src="@drawable/fond" />
 
@@ -16,15 +17,31 @@
         android:layout_height="match_parent"
         android:background="#A0FF8C00" />
 
-    <TextView
-        android:id="@+id/title"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="fragment 2"
-        android:textSize="26sp"
-        android:textColor="@android:color/white"
-        android:background="#80E6C39A"
-        android:padding="6dp"
-        android:gravity="start" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#80E6C39A"
+            android:gravity="start"
+            android:padding="10dp"
+            android:text="Liste des incidents"
+            android:textColor="@android:color/white"
+            android:textSize="26sp" />
+
+        <ListView
+            android:id="@+id/list_item"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#CCFFFFFF"
+            android:divider="#FFE6C39A"
+            android:dividerHeight="1dp" />
+
+    </LinearLayout>
 
 </FrameLayout>
