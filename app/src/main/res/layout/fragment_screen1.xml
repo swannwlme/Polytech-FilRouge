@@ -1,49 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:fillViewport="true"
     tools:context=".Screen1Fragment">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="@null"
-        android:scaleType="centerCrop"
-        android:src="@drawable/fond" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#80009688" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:paddingStart="20dp"
+        android:paddingTop="30dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="24dp">
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/incidentType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#9C009688"
-            android:padding="10dp"
-            android:text="Détail de l'incident"
-            android:textColor="@android:color/white"
-            android:textSize="26sp" />
+            android:gravity="center"
+            android:textColor="@android:color/black"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            tools:text="Type - Voiture" />
 
-        <TextView
-            android:id="@+id/incidentTitle"
+        <LinearLayout
+            android:id="@+id/incidentAddressRow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:background="#CCFFFFFF"
-            android:padding="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_location_pin"
+                app:tint="#FF0000" />
+
+            <TextView
+                android:id="@+id/incidentAddress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="#6B6B6B"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                tools:text="13 rue du bonheur" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/incidentDistance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
             android:textColor="@android:color/black"
-            android:textSize="22sp"
-            tools:text="Accident grave A7" />
+            android:textSize="27sp"
+            android:textStyle="bold"
+            tools:text="Distance - 2km" />
+
+        <TextView
+            android:id="@+id/incidentGps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:text="GPS : 14,6753° - 65,8374°"
+            android:textColor="#6B6B6B"
+            android:textSize="27sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/ratingLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="34dp"
+            android:text="Rating"
+            android:textColor="@android:color/black"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <RatingBar
+            android:id="@+id/incidentRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:stepSize="1"
+            tools:rating="3" />
+
+        <LinearLayout
+            android:id="@+id/descriptionHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                android:textColor="@android:color/black"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="8dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_edit" />
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/incidentDescription"
+            android:layout_width="match_parent"
+            android:layout_height="104dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/description_box_background"
+            android:gravity="top|start"
+            android:inputType="textMultiLine"
+            android:padding="10dp"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
-</FrameLayout>
+</ScrollView>
