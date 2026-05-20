@@ -1,28 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:fillViewport="true"
     tools:context=".Screen3Fragment">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/fond"
-        android:scaleType="centerCrop"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#A0C000FF"/>
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="fragment 3"
-        android:textSize="26sp"
-        android:textColor="@android:color/white"
-        android:background="#80E6C39A"
-        android:padding="6dp"/>
+        android:orientation="vertical">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/reportTitle"
+            android:layout_width="match_parent"
+            android:layout_height="86dp"
+            android:background="#575757"
+            android:gravity="center"
+            android:text="@string/incident_report_title"
+            android:textColor="@android:color/white"
+            android:textSize="42sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="26dp"
+            android:paddingTop="34dp"
+            android:paddingEnd="26dp"
+            android:paddingBottom="26dp">
+
+            <LinearLayout
+                android:id="@+id/vehicleSelector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/motoButton"
+                    android:layout_width="88dp"
+                    android:layout_height="88dp"
+                    android:layout_marginEnd="28dp"
+                    android:background="@drawable/incident_vehicle_option_background"
+                    android:contentDescription="@string/incident_vehicle_moto"
+                    android:padding="14dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/moto" />
+
+                <ImageButton
+                    android:id="@+id/carButton"
+                    android:layout_width="88dp"
+                    android:layout_height="88dp"
+                    android:background="@drawable/incident_vehicle_option_selected_background"
+                    android:contentDescription="@string/incident_vehicle_car"
+                    android:padding="14dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/voiture" />
+
+                <ImageButton
+                    android:id="@+id/truckButton"
+                    android:layout_width="88dp"
+                    android:layout_height="88dp"
+                    android:layout_marginStart="28dp"
+                    android:background="@drawable/incident_vehicle_option_background"
+                    android:contentDescription="@string/incident_vehicle_truck"
+                    android:padding="14dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/camion" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/descriptionLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="34dp"
+                android:labelFor="@id/incidentDescriptionInput"
+                android:text="@string/incident_description_label"
+                android:textColor="@android:color/black"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/incidentDescriptionInput"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/description_box_background"
+                android:gravity="top|start"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine|textCapSentences"
+                android:padding="10dp"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+
+            <FrameLayout
+                android:id="@+id/photoPlaceholder"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/incident_secondary_action_background"
+                android:enabled="false">
+
+                <ImageView
+                    android:layout_width="124dp"
+                    android:layout_height="124dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_camera"
+                    app:tint="@android:color/black" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/locationPlaceholder"
+                android:layout_width="match_parent"
+                android:layout_height="74dp"
+                android:layout_marginTop="22dp"
+                android:background="@drawable/incident_secondary_action_background"
+                android:enabled="false"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="58dp"
+                    android:layout_height="58dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_location_pin"
+                    app:tint="@android:color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/incident_location_label"
+                    android:textColor="@android:color/black"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/reportIncidentButton"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:layout_marginTop="22dp"
+                android:background="@drawable/incident_primary_button_background"
+                android:backgroundTint="@null"
+                android:text="@string/incident_report_button"
+                android:textAllCaps="false"
+                android:textColor="@android:color/black"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
