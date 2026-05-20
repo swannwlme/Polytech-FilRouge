@@ -73,6 +73,7 @@ public class Screen1Fragment extends Fragment {
         incidentType.setText("Type - " + incident.getVehiculeType().getVehiculeName());
         incidentAddress.setText(incident.getAdresse());
         incidentDistance.setText("Distance - " + formatDistance(incident.getDistanceKm()) + "km");
+        incidentGps.setText("Protocole : " + incident.getSafetyProtocol());
         incidentRating.setRating(incident.getStatus());
         incidentDescription.setText(incident.getDescription());
 

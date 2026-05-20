@@ -103,9 +103,23 @@ public class ControlActivity extends AppCompatActivity implements Notifiable, Me
                 && actionCode == Screen3Fragment.ACTION_INCIDENT_REPORTED
                 && object instanceof Incident) {
             Incident incident = (Incident) object;
+            String safetyProtocol = argsAction instanceof String ? (String) argsAction : incident.getSafetyProtocol();
             Log.d("ControlActivity", "Incident signalé : "
                     + incident.getVehiculeType().getVehiculeName()
-                    + " - " + incident.getDescription());
+                    + " - " + safetyProtocol);
+
+            Fragment fragment = Screen1Fragment.newInstance(incident);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.screenFragmentContainer, fragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
+            menuActif = Screen1Fragment.FRAGMENT_ID;
+
+            FragmentTransaction transactionMenu = getSupportFragmentManager().beginTransaction();
+            transactionMenu.replace(R.id.menuFragmentContainer, MenuFragment.newInstance(menuActif));
+            transactionMenu.commit();
             return;
         }
 

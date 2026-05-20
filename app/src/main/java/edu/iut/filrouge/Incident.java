@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Incident implements Parcelable {
+public abstract class Incident implements Parcelable {
 
     private VehiculeType vehiculeType;
     private String adresse;
@@ -13,19 +13,20 @@ public class Incident implements Parcelable {
     private double distanceKm;
     private float status;
 
-    public Incident(VehiculeType vehiculeType, String adresse) {
+    protected Incident(VehiculeType vehiculeType, String adresse) {
         this(vehiculeType, adresse, 0.0, 0.0f, "");
     }
 
-    public Incident(VehiculeType vehiculeType, String adresse, double distanceKm) {
+    protected Incident(VehiculeType vehiculeType, String adresse, double distanceKm) {
         this(vehiculeType, adresse, distanceKm, 0.0f, "");
     }
 
-    public Incident(VehiculeType vehiculeType, String adresse, double distanceKm, float status) {
+    protected Incident(VehiculeType vehiculeType, String adresse, double distanceKm, float status) {
         this(vehiculeType, adresse, distanceKm, status, "");
     }
 
-    public Incident(VehiculeType vehiculeType, String adresse, double distanceKm, float status, String description) {
+    protected Incident(VehiculeType vehiculeType, String adresse, double distanceKm, float status,
+                       String description) {
         this.vehiculeType = vehiculeType;
         this.adresse = adresse;
         this.distanceKm = distanceKm;
@@ -41,18 +42,6 @@ public class Incident implements Parcelable {
         distanceKm = in.readDouble();
         status = in.readFloat();
     }
-
-    public static final Creator<Incident> CREATOR = new Creator<Incident>() {
-        @Override
-        public Incident createFromParcel(Parcel in) {
-            return new Incident(in);
-        }
-
-        @Override
-        public Incident[] newArray(int size) {
-            return new Incident[size];
-        }
-    };
 
     public VehiculeType getVehiculeType() {
         return vehiculeType;
@@ -101,6 +90,8 @@ public class Incident implements Parcelable {
     public void setStatus(float status) {
         this.status = status;
     }
+
+    public abstract String getSafetyProtocol();
 
     @Override
     public int describeContents() {

@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 public class Screen3Fragment extends Fragment {
 
     public static final int FRAGMENT_ID = 2;
-    public static final int ACTION_INCIDENT_REPORTED = 1;
+    public static final int ACTION_INCIDENT_REPORTED = 0;
 
     private Notifiable notifiable;
     private VehiculeType selectedVehicleType = VehiculeType.VOITURE;
@@ -96,17 +96,20 @@ public class Screen3Fragment extends Fragment {
             return;
         }
 
-        Incident incident = new Incident(
-                selectedVehicleType,
+        IncidentFactory factory = getFactoryFor(selectedVehicleType);
+        Incident incident = factory.createIncident(
                 getString(R.string.incident_default_location),
-                0.0,
-                0.0f,
                 description
         );
         IncidentRepository.addIncident(incident);
 
         if (notifiable != null) {
-            notifiable.onDataChange(FRAGMENT_ID, incident, ACTION_INCIDENT_REPORTED, null);
+            notifiable.onDataChange(
+                    FRAGMENT_ID,
+                    incident,
+                    ACTION_INCIDENT_REPORTED,
+                    incident.getSafetyProtocol()
+            );
         }
 
         Toast.makeText(
@@ -114,6 +117,18 @@ public class Screen3Fragment extends Fragment {
                 getString(R.string.incident_report_sent) + " : " + selectedVehicleType.getVehiculeName(),
                 Toast.LENGTH_SHORT
         ).show();
+    }
+
+    private IncidentFactory getFactoryFor(VehiculeType vehicleType) {
+        switch (vehicleType) {
+            case MOTO:
+                return new MotoIncidentFactory();
+            case CAMION:
+                return new CamionIncidentFactory();
+            case VOITURE:
+            default:
+                return new VoitureIncidentFactory();
+        }
     }
 
     @Override
