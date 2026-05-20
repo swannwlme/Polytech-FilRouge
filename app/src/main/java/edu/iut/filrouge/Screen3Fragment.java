@@ -1,7 +1,11 @@
 package edu.iut.filrouge;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +13,18 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
+import java.util.Locale;
+
 public class Screen3Fragment extends Fragment {
+
+    private static final String TAG = "Screen3Fragment";
 
     public static final int FRAGMENT_ID = 2;
     public static final int ACTION_INCIDENT_REPORTED = 0;
@@ -25,6 +36,22 @@ public class Screen3Fragment extends Fragment {
     private ImageButton carButton;
     private ImageButton truckButton;
     private EditText descriptionInput;
+    private EditText currentTargetEditText;
+
+    private final ActivityResultLauncher<Intent> voiceLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                    ArrayList<String> matches = result.getData()
+                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+                    if (matches != null && !matches.isEmpty() && currentTargetEditText != null) {
+                        currentTargetEditText.setText(matches.get(0));
+                        currentTargetEditText.setSelection(currentTargetEditText.getText().length());
+                    }
+                }
+            }
+    );
 
     public Screen3Fragment() {
     }
@@ -54,6 +81,8 @@ public class Screen3Fragment extends Fragment {
         setupVehicleButton(truckButton, VehiculeType.CAMION);
         selectVehicle(VehiculeType.VOITURE);
 
+        view.findViewById(R.id.descriptionVoiceButton)
+                .setOnClickListener(v -> startVoiceRecognition(descriptionInput));
         view.findViewById(R.id.reportIncidentButton).setOnClickListener(v -> reportIncident());
 
         return view;
@@ -128,6 +157,21 @@ public class Screen3Fragment extends Fragment {
             case VOITURE:
             default:
                 return new VoitureIncidentFactory();
+        }
+    }
+
+    private void startVoiceRecognition(EditText target) {
+        currentTargetEditText = target;
+
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Parlez pour remplir le champ...");
+
+        try {
+            voiceLauncher.launch(intent);
+        } catch (Exception e) {
+            Log.e(TAG, "Reconnaissance vocale non supportee sur cet appareil.", e);
         }
     }
 

@@ -74,22 +74,42 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/descriptionLabel"
+            <LinearLayout
+                android:id="@+id/descriptionHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="34dp"
-                android:labelFor="@id/incidentDescriptionInput"
-                android:text="@string/incident_description_label"
-                android:textColor="@android:color/black"
-                android:textSize="26sp"
-                android:textStyle="bold" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/descriptionLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:labelFor="@id/incidentDescriptionInput"
+                    android:text="@string/incident_description_label"
+                    android:textColor="@android:color/black"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/descriptionVoiceButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/incident_voice_description"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_mic"
+                    app:tint="@android:color/black" />
+
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/incidentDescriptionInput"
                 android:layout_width="match_parent"
                 android:layout_height="110dp"
-                android:layout_marginTop="14dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/description_box_background"
                 android:gravity="top|start"
                 android:importantForAutofill="no"
