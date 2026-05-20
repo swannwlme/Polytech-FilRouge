@@ -99,6 +99,16 @@ public class ControlActivity extends AppCompatActivity implements Notifiable, Me
             return;
         }
 
+        if (numFragment == Screen3Fragment.FRAGMENT_ID
+                && actionCode == Screen3Fragment.ACTION_INCIDENT_REPORTED
+                && object instanceof Incident) {
+            Incident incident = (Incident) object;
+            Log.d("ControlActivity", "Incident signalé : "
+                    + incident.getVehiculeType().getVehiculeName()
+                    + " - " + incident.getDescription());
+            return;
+        }
+
         if (numFragment >= 0 && numFragment < FRAGMENT_COUNT) {
             Fragment fragment = createFragment(numFragment);
 

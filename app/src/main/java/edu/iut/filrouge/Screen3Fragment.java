@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 public class Screen3Fragment extends Fragment {
 
     public static final int FRAGMENT_ID = 2;
+    public static final int ACTION_INCIDENT_REPORTED = 1;
 
     private Notifiable notifiable;
     private VehiculeType selectedVehicleType = VehiculeType.VOITURE;
@@ -95,8 +96,17 @@ public class Screen3Fragment extends Fragment {
             return;
         }
 
+        Incident incident = new Incident(
+                selectedVehicleType,
+                getString(R.string.incident_default_location),
+                0.0,
+                0.0f,
+                description
+        );
+        IncidentRepository.addIncident(incident);
+
         if (notifiable != null) {
-            notifiable.onClick(FRAGMENT_ID);
+            notifiable.onDataChange(FRAGMENT_ID, incident, ACTION_INCIDENT_REPORTED, null);
         }
 
         Toast.makeText(

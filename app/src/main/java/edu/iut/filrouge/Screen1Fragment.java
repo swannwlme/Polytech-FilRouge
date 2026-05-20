@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -54,7 +55,7 @@ public class Screen1Fragment extends Fragment {
         TextView ratingLabel = view.findViewById(R.id.ratingLabel);
         RatingBar incidentRating = view.findViewById(R.id.incidentRating);
         View descriptionHeader = view.findViewById(R.id.descriptionHeader);
-        View incidentDescription = view.findViewById(R.id.incidentDescription);
+        EditText incidentDescription = view.findViewById(R.id.incidentDescription);
 
         if (incident == null) {
             incidentType.setText("Aucun incident sélectionné");
@@ -73,6 +74,7 @@ public class Screen1Fragment extends Fragment {
         incidentAddress.setText(incident.getAdresse());
         incidentDistance.setText("Distance - " + formatDistance(incident.getDistanceKm()) + "km");
         incidentRating.setRating(incident.getStatus());
+        incidentDescription.setText(incident.getDescription());
 
         return view;
     }

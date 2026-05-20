@@ -9,28 +9,35 @@ public class Incident implements Parcelable {
 
     private VehiculeType vehiculeType;
     private String adresse;
+    private String description;
     private double distanceKm;
     private float status;
 
     public Incident(VehiculeType vehiculeType, String adresse) {
-        this(vehiculeType, adresse, 0.0, 0.0f);
+        this(vehiculeType, adresse, 0.0, 0.0f, "");
     }
 
     public Incident(VehiculeType vehiculeType, String adresse, double distanceKm) {
-        this(vehiculeType, adresse, distanceKm, 0.0f);
+        this(vehiculeType, adresse, distanceKm, 0.0f, "");
     }
 
     public Incident(VehiculeType vehiculeType, String adresse, double distanceKm, float status) {
+        this(vehiculeType, adresse, distanceKm, status, "");
+    }
+
+    public Incident(VehiculeType vehiculeType, String adresse, double distanceKm, float status, String description) {
         this.vehiculeType = vehiculeType;
         this.adresse = adresse;
         this.distanceKm = distanceKm;
         this.status = status;
+        this.description = description;
     }
 
     protected Incident(Parcel in) {
         String vehiculeTypeName = in.readString();
         vehiculeType = vehiculeTypeName == null ? null : VehiculeType.valueOf(vehiculeTypeName);
         adresse = in.readString();
+        description = in.readString();
         distanceKm = in.readDouble();
         status = in.readFloat();
     }
@@ -61,6 +68,14 @@ public class Incident implements Parcelable {
 
     public void setAdresse(String adresse) {
         this.adresse = adresse;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public double getDistance(String coord) {
@@ -96,6 +111,7 @@ public class Incident implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(vehiculeType == null ? null : vehiculeType.name());
         dest.writeString(adresse);
+        dest.writeString(description);
         dest.writeDouble(distanceKm);
         dest.writeFloat(status);
     }

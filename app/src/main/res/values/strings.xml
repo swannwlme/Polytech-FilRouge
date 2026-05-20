@@ -7,6 +7,7 @@
     <string name="incident_vehicle_truck">Camion</string>
     <string name="incident_description_label">Description</string>
     <string name="incident_location_label">Emplacement</string>
+    <string name="incident_default_location">Emplacement non renseigné</string>
     <string name="incident_report_button">Signaler</string>
     <string name="incident_description_required">Description obligatoire</string>
     <string name="incident_report_sent">Incident signalé</string>
