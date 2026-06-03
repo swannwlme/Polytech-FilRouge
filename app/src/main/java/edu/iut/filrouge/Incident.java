@@ -3,15 +3,18 @@ package edu.iut.filrouge;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class Incident implements Parcelable {
+public abstract class Incident implements Parcelable, IssueObservable {
 
     private VehiculeType vehiculeType;
     private String adresse;
     private String description;
     private double distanceKm;
     private float status;
+    private transient List<IssueObserver> observers = new ArrayList<>();
 
     protected Incident(VehiculeType vehiculeType, String adresse) {
         this(vehiculeType, adresse, 0.0, 0.0f, "");
@@ -88,10 +91,44 @@ public abstract class Incident implements Parcelable {
     }
 
     public void setStatus(float status) {
+        if (Float.compare(this.status, status) == 0) {
+            return;
+        }
+
         this.status = status;
+        notifyObservers();
     }
 
     public abstract String getSafetyProtocol();
+
+    @Override
+    public void addObserver(IssueObserver observer) {
+        if (observer == null || getObservers().contains(observer)) {
+            return;
+        }
+
+        getObservers().add(observer);
+    }
+
+    @Override
+    public void removeObserver(IssueObserver observer) {
+        getObservers().remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (IssueObserver observer : new ArrayList<>(getObservers())) {
+            observer.onStatusChanged(this);
+        }
+    }
+
+    private List<IssueObserver> getObservers() {
+        if (observers == null) {
+            observers = new ArrayList<>();
+        }
+
+        return observers;
+    }
 
     @Override
     public int describeContents() {
