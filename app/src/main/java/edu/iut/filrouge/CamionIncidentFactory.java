@@ -4,6 +4,8 @@ public class CamionIncidentFactory implements IncidentFactory {
 
     @Override
     public Incident createIncident(String adresse, String description) {
-        return new CamionIncident(adresse, description, 0.0, 3.0f);
+        Incident incident = new CamionIncident(adresse, description, 0.0, 3.0f);
+        incident.addObserver(EmergencyService.getInstance());
+        return incident;
     }
 }
