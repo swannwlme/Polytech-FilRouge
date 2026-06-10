@@ -1,4 +1,4 @@
-package edu.iut.filrouge;
+package edu.iut.filrouge.model;
 
 public interface IssueObserver {
     void onStatusChanged(Incident incident);

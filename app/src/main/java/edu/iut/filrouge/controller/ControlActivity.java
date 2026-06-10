@@ -1,4 +1,4 @@
-package edu.iut.filrouge;
+package edu.iut.filrouge.controller;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -13,15 +13,29 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import edu.iut.filrouge.R;
+import edu.iut.filrouge.model.Incident;
+import edu.iut.filrouge.model.IssueManager;
+import edu.iut.filrouge.view.MenuFragment;
+import edu.iut.filrouge.view.Screen1Fragment;
+import edu.iut.filrouge.view.Screen2Fragment;
+import edu.iut.filrouge.view.Screen3Fragment;
+import edu.iut.filrouge.view.Screen4Fragment;
+import edu.iut.filrouge.view.Screen5Fragment;
+import edu.iut.filrouge.view.Screen6Fragment;
+import edu.iut.filrouge.view.Screen7Fragment;
+
 public class ControlActivity extends AppCompatActivity implements Notifiable, Menuable {
 
     private static final int FRAGMENT_COUNT = 7;
 
     private int menuActif;
+    private IssueManager issueManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        startIssueMvcModel();
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_control);
         applySafeAreaInsets();
@@ -171,11 +185,15 @@ public class ControlActivity extends AppCompatActivity implements Notifiable, Me
             case 0:
                 return new Screen1Fragment();
             case 1:
-                return new Screen2Fragment();
+                Screen2Fragment screen2Fragment = new Screen2Fragment();
+                screen2Fragment.setIssueManager(issueManager);
+                return screen2Fragment;
             case 2:
-                return new Screen3Fragment();
+                Screen3Fragment screen3Fragment = new Screen3Fragment();
+                screen3Fragment.setIssueManager(issueManager);
+                return screen3Fragment;
             case 3:
-                return new Screen4Fragment();
+                return createIssueMvcView();
             case 4:
                 return new Screen5Fragment();
             case 5:
@@ -193,6 +211,21 @@ public class ControlActivity extends AppCompatActivity implements Notifiable, Me
         }
 
         return index;
+    }
+
+    private void startIssueMvcModel() {
+        issueManager = new IssueManager();
+        issueManager.populate();
+    }
+
+    private Screen4Fragment createIssueMvcView() {
+        Screen4Fragment view = new Screen4Fragment();
+        issueManager.addObserver(view);
+
+        IssueController controller = new IssueController(view, issueManager);
+        view.setController(controller);
+
+        return view;
     }
 
     private void applySafeAreaInsets() {

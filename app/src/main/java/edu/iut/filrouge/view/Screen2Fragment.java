@@ -1,4 +1,4 @@
-package edu.iut.filrouge;
+package edu.iut.filrouge.view;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,6 +13,11 @@ import androidx.fragment.app.Fragment;
 
 import java.util.List;
 
+import edu.iut.filrouge.R;
+import edu.iut.filrouge.controller.Notifiable;
+import edu.iut.filrouge.model.Incident;
+import edu.iut.filrouge.model.IssueManager;
+
 public class Screen2Fragment extends Fragment implements ClickableIncident<Incident> {
 
     public static final int FRAGMENT_ID = 1;
@@ -20,10 +25,15 @@ public class Screen2Fragment extends Fragment implements ClickableIncident<Incid
     public static final int ACTION_STATUS_CHANGED = 2;
 
     private Notifiable notifiable;
+    private IssueManager issueManager;
     private List<Incident> incidents;
     private IncidentAdapter adapter;
 
     public Screen2Fragment() {
+    }
+
+    public void setIssueManager(IssueManager issueManager) {
+        this.issueManager = issueManager;
     }
 
     @Override
@@ -43,7 +53,7 @@ public class Screen2Fragment extends Fragment implements ClickableIncident<Incid
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_screen2, container, false);
 
-        incidents = IncidentRepository.getIncidents();
+        incidents = issueManager.getIncidents();
         ListView incidentList = view.findViewById(R.id.list_item);
         adapter = new IncidentAdapter(requireContext(), incidents, this);
         incidentList.setAdapter(adapter);

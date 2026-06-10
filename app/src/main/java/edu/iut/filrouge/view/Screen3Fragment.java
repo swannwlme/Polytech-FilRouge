@@ -1,4 +1,4 @@
-package edu.iut.filrouge;
+package edu.iut.filrouge.view;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,6 +22,16 @@ import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import edu.iut.filrouge.R;
+import edu.iut.filrouge.controller.Notifiable;
+import edu.iut.filrouge.model.CamionIncidentFactory;
+import edu.iut.filrouge.model.Incident;
+import edu.iut.filrouge.model.IncidentFactory;
+import edu.iut.filrouge.model.IssueManager;
+import edu.iut.filrouge.model.MotoIncidentFactory;
+import edu.iut.filrouge.model.VehiculeType;
+import edu.iut.filrouge.model.VoitureIncidentFactory;
+
 public class Screen3Fragment extends Fragment {
 
     private static final String TAG = "Screen3Fragment";
@@ -30,6 +40,7 @@ public class Screen3Fragment extends Fragment {
     public static final int ACTION_INCIDENT_REPORTED = 0;
 
     private Notifiable notifiable;
+    private IssueManager issueManager;
     private VehiculeType selectedVehicleType = VehiculeType.VOITURE;
 
     private ImageButton motoButton;
@@ -54,6 +65,10 @@ public class Screen3Fragment extends Fragment {
     );
 
     public Screen3Fragment() {
+    }
+
+    public void setIssueManager(IssueManager issueManager) {
+        this.issueManager = issueManager;
     }
 
     @Override
@@ -130,7 +145,9 @@ public class Screen3Fragment extends Fragment {
                 getString(R.string.incident_default_location),
                 description
         );
-        IncidentRepository.addIncident(incident);
+        if (issueManager != null) {
+            issueManager.addIncident(incident);
+        }
 
         if (notifiable != null) {
             notifiable.onDataChange(

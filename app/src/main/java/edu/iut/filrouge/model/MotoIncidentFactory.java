@@ -1,10 +1,10 @@
-package edu.iut.filrouge;
+package edu.iut.filrouge.model;
 
-public class CamionIncidentFactory implements IncidentFactory {
+public class MotoIncidentFactory implements IncidentFactory {
 
     @Override
     public Incident createIncident(String adresse, String description, double latitude, double longitude) {
-        Incident incident = new CamionIncident(adresse, description, 0.0, 3.0f, latitude, longitude);
+        Incident incident = new MotoIncident(adresse, description, 0.0, 2.0f, latitude, longitude);
         incident.addObserver(EmergencyService.getInstance());
         return incident;
     }

@@ -1,4 +1,4 @@
-package edu.iut.filrouge;
+package edu.iut.filrouge.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,6 +14,9 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 import java.util.Locale;
+
+import edu.iut.filrouge.R;
+import edu.iut.filrouge.model.Incident;
 
 public class IncidentAdapter extends ArrayAdapter<Incident> {
 

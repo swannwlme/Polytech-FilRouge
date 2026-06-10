@@ -1,4 +1,4 @@
-package edu.iut.filrouge;
+package edu.iut.filrouge.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +13,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.util.Locale;
+
+import edu.iut.filrouge.R;
+import edu.iut.filrouge.model.Incident;
 
 public class Screen1Fragment extends Fragment {
 

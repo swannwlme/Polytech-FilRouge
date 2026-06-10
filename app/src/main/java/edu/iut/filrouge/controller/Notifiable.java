@@ -1,4 +1,4 @@
-package edu.iut.filrouge;
+package edu.iut.filrouge.controller;
 
 public interface Notifiable {
     void onClick(int numFragment);

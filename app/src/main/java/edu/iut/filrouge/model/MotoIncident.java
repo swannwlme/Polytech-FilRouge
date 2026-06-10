@@ -1,4 +1,4 @@
-package edu.iut.filrouge;
+package edu.iut.filrouge.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

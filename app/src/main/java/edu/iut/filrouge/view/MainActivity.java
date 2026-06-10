@@ -1,4 +1,4 @@
-package edu.iut.filrouge;
+package edu.iut.filrouge.view;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
@@ -12,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import edu.iut.filrouge.R;
+import edu.iut.filrouge.controller.ControlActivity;
 
 public class MainActivity extends AppCompatActivity {
 

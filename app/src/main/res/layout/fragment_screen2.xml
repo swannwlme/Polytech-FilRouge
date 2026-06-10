@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:orientation="vertical"
-    tools:context=".Screen2Fragment">
+    tools:context=".view.Screen2Fragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/incidentsAppBar"

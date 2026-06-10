@@ -1,4 +1,4 @@
-package edu.iut.filrouge;
+package edu.iut.filrouge.view;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -16,6 +16,13 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import edu.iut.filrouge.R;
+import edu.iut.filrouge.controller.IssueController;
+import edu.iut.filrouge.controller.Notifiable;
+import edu.iut.filrouge.model.Incident;
+import edu.iut.filrouge.model.IncidentFactory;
+import edu.iut.filrouge.model.ViewObserver;
+
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
@@ -26,13 +33,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class Screen4Fragment extends Fragment {
+public class Screen4Fragment extends Fragment implements ViewObserver {
 
     public static final int FRAGMENT_ID = 3;
 
     private static final double DEFAULT_ZOOM = 15.5;
 
     private Notifiable notifiable;
+    private IssueController issueController;
     private MapView mapView;
     private List<Incident> incidents;
     private MapIncidentAdapter mapIncidentAdapter;
@@ -50,6 +58,10 @@ public class Screen4Fragment extends Fragment {
         }
     }
 
+    public void setController(IssueController issueController) {
+        this.issueController = issueController;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -59,7 +71,7 @@ public class Screen4Fragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_screen4, container, false);
 
-        incidents = IncidentRepository.getIncidents();
+        incidents = issueController == null ? new ArrayList<>() : issueController.getIncidents();
         mapView = view.findViewById(R.id.incidentsMap);
         ListView incidentList = view.findViewById(R.id.mapIncidentList);
 
@@ -68,7 +80,7 @@ public class Screen4Fragment extends Fragment {
         mapIncidentAdapter = new MapIncidentAdapter(requireContext(), incidents);
         incidentList.setAdapter(mapIncidentAdapter);
         incidentList.setOnItemClickListener((parent, itemView, position, id) ->
-                toggleIncidentMarker(incidents.get(position)));
+                issueController.onIncidentSelected(incidents.get(position)));
 
         return view;
     }
@@ -135,31 +147,10 @@ public class Screen4Fragment extends Fragment {
             marker.setIcon(markerIcon);
             marker.setTitle(getIncidentLabel(incident));
             marker.setSnippet(incident.getAdresse() + "\n" + formatCoordinates(incident));
-            marker.setRelatedObject(incident);
-            marker.setDraggable(true);
-            marker.setOnMarkerClickListener((clickedMarker, clickedMapView) -> {
-                toggleMarker(clickedMarker);
-                clickedMapView.getController().animateTo(clickedMarker.getPosition());
-                return true;
-            });
-            marker.setOnMarkerDragListener(new Marker.OnMarkerDragListener() {
-                @Override
-                public void onMarkerDrag(Marker draggedMarker) {
-                    updateIncidentPosition(draggedMarker, false);
-                }
 
-                @Override
-                public void onMarkerDragEnd(Marker draggedMarker) {
-                    updateIncidentPosition(draggedMarker, true);
-                    draggedMarker.showInfoWindow();
-                    mapView.invalidate();
-                }
-
-                @Override
-                public void onMarkerDragStart(Marker draggedMarker) {
-                    draggedMarker.closeInfoWindow();
-                }
-            });
+            if (issueController != null) {
+                issueController.configureMarker(marker, incident);
+            }
 
             markers.add(marker);
             mapView.getOverlays().add(marker);
@@ -184,7 +175,7 @@ public class Screen4Fragment extends Fragment {
         return new GeoPoint(latitude / incidents.size(), longitude / incidents.size());
     }
 
-    private void toggleIncidentMarker(Incident incident) {
+    public void toggleIncidentMarker(Incident incident) {
         for (Marker marker : markers) {
             if (marker.getRelatedObject() == incident) {
                 toggleMarker(marker);
@@ -194,7 +185,7 @@ public class Screen4Fragment extends Fragment {
         }
     }
 
-    private void toggleMarker(Marker marker) {
+    public void toggleMarker(Marker marker) {
         boolean wasShown = marker.isInfoWindowShown();
         closeInfoWindows();
 
@@ -205,28 +196,57 @@ public class Screen4Fragment extends Fragment {
         mapView.invalidate();
     }
 
-    private void updateIncidentPosition(Marker marker, boolean refreshList) {
-        Object relatedObject = marker.getRelatedObject();
-
-        if (!(relatedObject instanceof Incident)) {
-            return;
-        }
-
-        Incident incident = (Incident) relatedObject;
-        GeoPoint position = marker.getPosition();
-        incident.setLatitude(position.getLatitude());
-        incident.setLongitude(position.getLongitude());
-        marker.setSnippet(incident.getAdresse() + "\n" + formatCoordinates(incident));
-
-        if (refreshList && mapIncidentAdapter != null) {
-            mapIncidentAdapter.notifyDataSetChanged();
-        }
+    public void showMarkerInfo(Marker marker) {
+        marker.showInfoWindow();
+        mapView.invalidate();
     }
 
     private void closeInfoWindows() {
         for (Marker marker : markers) {
             marker.closeInfoWindow();
         }
+    }
+
+    @Override
+    public void onModelChanged() {
+        if (mapView == null || issueController == null) {
+            return;
+        }
+
+        incidents = issueController.getIncidents();
+
+        if (markers.size() != incidents.size()) {
+            rebuildMarkers();
+        } else {
+            refreshMarkerDetails();
+        }
+
+        if (mapIncidentAdapter != null) {
+            mapIncidentAdapter.notifyDataSetChanged();
+        }
+
+        mapView.invalidate();
+    }
+
+    private void rebuildMarkers() {
+        mapView.getOverlays().removeAll(markers);
+        markers.clear();
+        addIncidentMarkers();
+    }
+
+    private void refreshMarkerDetails() {
+        for (Marker marker : markers) {
+            Object relatedObject = marker.getRelatedObject();
+
+            if (relatedObject instanceof Incident) {
+                updateMarkerDetails(marker, (Incident) relatedObject);
+            }
+        }
+    }
+
+    private static void updateMarkerDetails(Marker marker, Incident incident) {
+        marker.setTitle(getIncidentLabel(incident));
+        marker.setSnippet(incident.getAdresse() + "\n" + formatCoordinates(incident));
     }
 
     private static String getIncidentLabel(Incident incident) {

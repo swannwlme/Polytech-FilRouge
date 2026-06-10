@@ -1,4 +1,4 @@
-package edu.iut.filrouge;
+package edu.iut.filrouge.model;
 
 public enum VehiculeType {
     VOITURE("Voiture", "ic_vehicle_car"),

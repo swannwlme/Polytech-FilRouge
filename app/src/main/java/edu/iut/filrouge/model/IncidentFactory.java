@@ -1,4 +1,4 @@
-package edu.iut.filrouge;
+package edu.iut.filrouge.model;
 
 public interface IncidentFactory {
     double DEFAULT_LATITUDE = 43.6156;
