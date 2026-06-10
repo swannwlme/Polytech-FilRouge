@@ -9,6 +9,11 @@ public class MotoIncident extends Incident {
         super(VehiculeType.MOTO, adresse, distanceKm, status, description);
     }
 
+    public MotoIncident(String adresse, String description, double distanceKm, float status,
+                        double latitude, double longitude) {
+        super(VehiculeType.MOTO, adresse, distanceKm, status, description, latitude, longitude);
+    }
+
     protected MotoIncident(Parcel in) {
         super(in);
     }

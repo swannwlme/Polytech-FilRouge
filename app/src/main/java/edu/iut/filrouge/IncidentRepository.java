@@ -11,16 +11,26 @@ public final class IncidentRepository {
     private static final IncidentFactory CAMION_FACTORY = new CamionIncidentFactory();
 
     private static final List<Incident> incidents = new ArrayList<>(Arrays.asList(
-            createWithDistance(VOITURE_FACTORY, "13 rue du bonheur", 2.0f),
-            createWithDistance(MOTO_FACTORY, "41 avenue de la joie", 4.0f),
-            createWithDistance(CAMION_FACTORY, "2 impasse du cacatoès", 15.3f),
-            createWithDistance(VOITURE_FACTORY, "Bande d'arrêt d'urgence - A7 sortie 12", 7.6f),
-            createWithDistance(CAMION_FACTORY, "Voie lente - rocade Sud", 11.2f),
-            createWithDistance(MOTO_FACTORY, "Accotement - D10", 5.4f),
-            createWithDistance(VOITURE_FACTORY, "Bretelle d'accès centre-ville", 3.8f),
-            createWithDistance(CAMION_FACTORY, "Aire de repos des Pins", 18.1f),
-            createWithDistance(VOITURE_FACTORY, "Pont suspendu", 9.7f),
-            createWithDistance(MOTO_FACTORY, "Rond-point Jean Jaurès", 6.2f)
+            createWithLocation(VOITURE_FACTORY, "Route des Colles", "Accident grave A7",
+                    2.0f, 43.6156, 7.0718),
+            createWithLocation(MOTO_FACTORY, "Rond-point Saint-Philippe", "Route barree",
+                    4.0f, 43.6174, 7.0742),
+            createWithLocation(CAMION_FACTORY, "Route des Lucioles", "Obstacle sur la chaussee",
+                    15.3f, 43.6168, 7.0684),
+            createWithLocation(VOITURE_FACTORY, "Bande d'arret d'urgence - A7 sortie 12", "Bouchon massif",
+                    7.6f, 43.6141, 7.0735),
+            createWithLocation(CAMION_FACTORY, "Voie lente - rocade Sud", "Travaux de nuit",
+                    11.2f, 43.6137, 7.0701),
+            createWithLocation(MOTO_FACTORY, "Accotement - D10", "Panne de signalisation",
+                    5.4f, 43.6182, 7.0711),
+            createWithLocation(VOITURE_FACTORY, "Bretelle d'acces centre-ville", "Vehicule a contresens",
+                    3.8f, 43.6128, 7.0750),
+            createWithLocation(CAMION_FACTORY, "Aire de repos des Pins", "Chargement renverse",
+                    18.1f, 43.6192, 7.0675),
+            createWithLocation(VOITURE_FACTORY, "Pont suspendu", "Priorite pompiers",
+                    9.7f, 43.6119, 7.0694),
+            createWithLocation(MOTO_FACTORY, "Rond-point Jean Jaures", "Depannage en cours",
+                    6.2f, 43.6160, 7.0764)
     ));
 
     private IncidentRepository() {
@@ -34,8 +44,9 @@ public final class IncidentRepository {
         incidents.add(0, incident);
     }
 
-    private static Incident createWithDistance(IncidentFactory factory, String adresse, double distanceKm) {
-        Incident incident = factory.createIncident(adresse, "");
+    private static Incident createWithLocation(IncidentFactory factory, String adresse, String description,
+                                               double distanceKm, double latitude, double longitude) {
+        Incident incident = factory.createIncident(adresse, description, latitude, longitude);
         incident.setDistanceKm(distanceKm);
         return incident;
     }

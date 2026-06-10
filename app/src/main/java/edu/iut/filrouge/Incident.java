@@ -14,6 +14,8 @@ public abstract class Incident implements Parcelable, IssueObservable {
     private String description;
     private double distanceKm;
     private float status;
+    private double latitude;
+    private double longitude;
     private transient List<IssueObserver> observers = new ArrayList<>();
 
     protected Incident(VehiculeType vehiculeType, String adresse) {
@@ -30,11 +32,19 @@ public abstract class Incident implements Parcelable, IssueObservable {
 
     protected Incident(VehiculeType vehiculeType, String adresse, double distanceKm, float status,
                        String description) {
+        this(vehiculeType, adresse, distanceKm, status, description,
+                IncidentFactory.DEFAULT_LATITUDE, IncidentFactory.DEFAULT_LONGITUDE);
+    }
+
+    protected Incident(VehiculeType vehiculeType, String adresse, double distanceKm, float status,
+                       String description, double latitude, double longitude) {
         this.vehiculeType = vehiculeType;
         this.adresse = adresse;
         this.distanceKm = distanceKm;
         this.status = status;
         this.description = description;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     protected Incident(Parcel in) {
@@ -44,6 +54,8 @@ public abstract class Incident implements Parcelable, IssueObservable {
         description = in.readString();
         distanceKm = in.readDouble();
         status = in.readFloat();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
     }
 
     public VehiculeType getVehiculeType() {
@@ -99,6 +111,22 @@ public abstract class Incident implements Parcelable, IssueObservable {
         notifyObservers();
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
     public abstract String getSafetyProtocol();
 
     @Override
@@ -142,5 +170,7 @@ public abstract class Incident implements Parcelable, IssueObservable {
         dest.writeString(description);
         dest.writeDouble(distanceKm);
         dest.writeFloat(status);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
     }
 }

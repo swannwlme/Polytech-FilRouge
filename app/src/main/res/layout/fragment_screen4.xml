@@ -1,29 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
     tools:context=".Screen4Fragment">
 
-    <ImageView
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/mapAppBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/fond"
-        android:scaleType="centerCrop"/>
+        android:layout_height="?attr/actionBarSize"
+        android:background="#575757"
+        android:elevation="4dp"
+        app:title="@string/incident_map_title"
+        app:titleTextColor="@android:color/white" />
 
-    <View
+    <FrameLayout
+        android:id="@+id/mapContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#A0FFFF00"/>
+        android:layout_height="0dp"
+        android:layout_weight="1.15">
 
-    <TextView
+        <org.osmdroid.views.MapView
+            android:id="@+id/incidentsMap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
+    <ListView
+        android:id="@+id/mapIncidentList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="fragment 4"
-        android:textSize="26sp"
-        android:textColor="@android:color/white"
-        android:background="#80E6C39A"
-        android:padding="6dp"/>
+        android:layout_height="0dp"
+        android:layout_weight="0.85"
+        android:background="@android:color/white"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="#D7D7D7"
+        android:dividerHeight="1dp" />
 
-
-</FrameLayout>
+</LinearLayout>

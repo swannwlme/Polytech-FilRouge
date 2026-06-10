@@ -9,6 +9,11 @@ public class CamionIncident extends Incident {
         super(VehiculeType.CAMION, adresse, distanceKm, status, description);
     }
 
+    public CamionIncident(String adresse, String description, double distanceKm, float status,
+                          double latitude, double longitude) {
+        super(VehiculeType.CAMION, adresse, distanceKm, status, description, latitude, longitude);
+    }
+
     protected CamionIncident(Parcel in) {
         super(in);
     }

@@ -73,7 +73,7 @@ public class Screen1Fragment extends Fragment {
         incidentType.setText("Type - " + incident.getVehiculeType().getVehiculeName());
         incidentAddress.setText(incident.getAdresse());
         incidentDistance.setText("Distance - " + formatDistance(incident.getDistanceKm()) + "km");
-        incidentGps.setText("Protocole : " + incident.getSafetyProtocol());
+        incidentGps.setText("GPS : " + formatCoordinates(incident));
         incidentRating.setRating(incident.getStatus());
         incidentDescription.setText(incident.getDescription());
 
@@ -86,5 +86,9 @@ public class Screen1Fragment extends Fragment {
         }
 
         return String.format(Locale.US, "%.1f", distanceKm);
+    }
+
+    private String formatCoordinates(Incident incident) {
+        return String.format(Locale.US, "%.4f, %.4f", incident.getLatitude(), incident.getLongitude());
     }
 }
