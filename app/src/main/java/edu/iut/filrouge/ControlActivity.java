@@ -2,9 +2,14 @@ package edu.iut.filrouge;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -17,7 +22,9 @@ public class ControlActivity extends AppCompatActivity implements Notifiable, Me
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_control);
+        applySafeAreaInsets();
 
         menuActif = sanitizeFragmentIndex(getIntent().getIntExtra("menu", 0));
 
@@ -186,5 +193,25 @@ public class ControlActivity extends AppCompatActivity implements Notifiable, Me
         }
 
         return index;
+    }
+
+    private void applySafeAreaInsets() {
+        View root = findViewById(R.id.main);
+        int initialPaddingLeft = root.getPaddingLeft();
+        int initialPaddingTop = root.getPaddingTop();
+        int initialPaddingRight = root.getPaddingRight();
+        int initialPaddingBottom = root.getPaddingBottom();
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, (view, windowInsets) -> {
+            Insets systemBars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            view.setPadding(
+                    initialPaddingLeft + systemBars.left,
+                    initialPaddingTop + systemBars.top,
+                    initialPaddingRight + systemBars.right,
+                    initialPaddingBottom + systemBars.bottom
+            );
+            return windowInsets;
+        });
+        ViewCompat.requestApplyInsets(root);
     }
 }

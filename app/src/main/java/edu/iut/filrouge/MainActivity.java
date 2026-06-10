@@ -22,7 +22,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        applySafeAreaInsets();
 
         imageViewAnimation = findViewById(R.id.imageViewAnimation);
 
@@ -44,5 +46,25 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("menu", 3);
             startActivity(intent);
         });
+    }
+
+    private void applySafeAreaInsets() {
+        View root = findViewById(R.id.main);
+        int initialPaddingLeft = root.getPaddingLeft();
+        int initialPaddingTop = root.getPaddingTop();
+        int initialPaddingRight = root.getPaddingRight();
+        int initialPaddingBottom = root.getPaddingBottom();
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, (view, windowInsets) -> {
+            Insets systemBars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            view.setPadding(
+                    initialPaddingLeft + systemBars.left,
+                    initialPaddingTop + systemBars.top,
+                    initialPaddingRight + systemBars.right,
+                    initialPaddingBottom + systemBars.bottom
+            );
+            return windowInsets;
+        });
+        ViewCompat.requestApplyInsets(root);
     }
 }
