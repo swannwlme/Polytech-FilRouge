@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "640436822511",
+    "project_id": "fil-rouge-polytech",
+    "storage_bucket": "fil-rouge-polytech.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640436822511:android:b72b4bcf23c280b3aa961a",
+        "android_client_info": {
+          "package_name": "edu.iut.filrouge"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2JG6m_Wt7fNoxt6LIX2OIcM6nrNmnNxc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
