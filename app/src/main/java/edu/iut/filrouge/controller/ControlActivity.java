@@ -6,6 +6,7 @@ import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -25,12 +26,15 @@ import edu.iut.filrouge.view.Screen5Fragment;
 import edu.iut.filrouge.view.Screen6Fragment;
 import edu.iut.filrouge.view.Screen7Fragment;
 
-public class ControlActivity extends AppCompatActivity implements Notifiable, Menuable {
+public class ControlActivity extends AppCompatActivity implements Notifiable, Menuable, Picturable {
 
     private static final int FRAGMENT_COUNT = 7;
+    private static final String STATE_MENU_ACTIF = "menu_actif";
+    private static final String STATE_ACTIVE_INCIDENT = "active_incident";
 
     private int menuActif;
     private IssueManager issueManager;
+    private Incident activeIncident;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +44,12 @@ public class ControlActivity extends AppCompatActivity implements Notifiable, Me
         setContentView(R.layout.activity_control);
         applySafeAreaInsets();
 
-        menuActif = sanitizeFragmentIndex(getIntent().getIntExtra("menu", 0));
+        if (savedInstanceState != null) {
+            menuActif = sanitizeFragmentIndex(savedInstanceState.getInt(STATE_MENU_ACTIF, 0));
+            activeIncident = savedInstanceState.getParcelable(STATE_ACTIVE_INCIDENT);
+        } else {
+            menuActif = sanitizeFragmentIndex(getIntent().getIntExtra("menu", 0));
+        }
 
         if (savedInstanceState == null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -86,15 +95,30 @@ public class ControlActivity extends AppCompatActivity implements Notifiable, Me
     }
 
     @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(STATE_MENU_ACTIF, menuActif);
+        outState.putParcelable(STATE_ACTIVE_INCIDENT, activeIncident);
+    }
+
+    @Override
     public void onClick(int numFragment) {
         Log.d("ControlActivity", "Le bouton GO du Screen" + numFragment + "Fragment a été cliqué");
     }
 
     @Override
     public void onDataChange(int numFragment, Object object, int actionCode, Object argsAction) {
+        if (numFragment == Screen1Fragment.FRAGMENT_ID
+                && actionCode == Screen1Fragment.ACTION_INCIDENT_DISPLAYED
+                && object instanceof Incident) {
+            activeIncident = (Incident) object;
+            return;
+        }
+
         if (numFragment == Screen2Fragment.FRAGMENT_ID
                 && actionCode == Screen2Fragment.ACTION_OPEN_DETAILS
                 && object instanceof Incident) {
+            activeIncident = (Incident) object;
             Fragment fragment = Screen1Fragment.newInstance((Incident) object);
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -124,6 +148,7 @@ public class ControlActivity extends AppCompatActivity implements Notifiable, Me
                 && actionCode == Screen3Fragment.ACTION_INCIDENT_REPORTED
                 && object instanceof Incident) {
             Incident incident = (Incident) object;
+            activeIncident = incident;
             String safetyProtocol = argsAction instanceof String ? (String) argsAction : incident.getSafetyProtocol();
             Log.d("ControlActivity", "Incident signalé : "
                     + incident.getVehiculeType().getVehiculeName()
@@ -162,6 +187,16 @@ public class ControlActivity extends AppCompatActivity implements Notifiable, Me
             transactionMenu.replace(R.id.menuFragmentContainer, MenuFragment.newInstance(menuActif));
             transactionMenu.commit();
         }
+    }
+
+    @Override
+    public void onPictureTaken(String photopath) {
+        if (activeIncident == null) {
+            Log.w("ControlActivity", "Photo reçue sans incident actif : " + photopath);
+            return;
+        }
+
+        issueManager.setPicture(activeIncident, photopath);
     }
 
     @Override

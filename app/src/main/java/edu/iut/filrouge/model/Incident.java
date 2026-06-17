@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Incident implements Parcelable, IssueObservable {
@@ -16,6 +17,7 @@ public abstract class Incident implements Parcelable, IssueObservable {
     private float status;
     private double latitude;
     private double longitude;
+    private String picture;
     private transient List<IssueObserver> observers = new ArrayList<>();
 
     protected Incident(VehiculeType vehiculeType, String adresse) {
@@ -56,6 +58,7 @@ public abstract class Incident implements Parcelable, IssueObservable {
         status = in.readFloat();
         latitude = in.readDouble();
         longitude = in.readDouble();
+        picture = in.readString();
     }
 
     public VehiculeType getVehiculeType() {
@@ -127,6 +130,19 @@ public abstract class Incident implements Parcelable, IssueObservable {
         this.longitude = longitude;
     }
 
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        if (Objects.equals(this.picture, picture)) {
+            return;
+        }
+
+        this.picture = picture;
+        notifyPictureChanged();
+    }
+
     public abstract String getSafetyProtocol();
 
     @Override
@@ -147,6 +163,12 @@ public abstract class Incident implements Parcelable, IssueObservable {
     public void notifyObservers() {
         for (IssueObserver observer : new ArrayList<>(getObservers())) {
             observer.onStatusChanged(this);
+        }
+    }
+
+    private void notifyPictureChanged() {
+        for (IssueObserver observer : new ArrayList<>(getObservers())) {
+            observer.onPictureChanged(this);
         }
     }
 
@@ -172,5 +194,6 @@ public abstract class Incident implements Parcelable, IssueObservable {
         dest.writeFloat(status);
         dest.writeDouble(latitude);
         dest.writeDouble(longitude);
+        dest.writeString(picture);
     }
 }

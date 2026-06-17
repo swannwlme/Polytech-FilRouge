@@ -1,5 +1,6 @@
 package edu.iut.filrouge.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,14 +16,18 @@ import androidx.fragment.app.Fragment;
 import java.util.Locale;
 
 import edu.iut.filrouge.R;
+import edu.iut.filrouge.controller.Notifiable;
 import edu.iut.filrouge.model.Incident;
+import edu.iut.filrouge.model.IssueObserver;
 
-public class Screen1Fragment extends Fragment {
+public class Screen1Fragment extends Fragment implements IssueObserver {
 
     public static final int FRAGMENT_ID = 0;
+    public static final int ACTION_INCIDENT_DISPLAYED = 1;
     private static final String ARG_INCIDENT = "incident";
 
     private Incident incident;
+    private Notifiable notifiable;
 
     public Screen1Fragment() {
     }
@@ -44,6 +49,17 @@ public class Screen1Fragment extends Fragment {
         }
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if (context instanceof Notifiable) {
+            notifiable = (Notifiable) context;
+        } else {
+            throw new IllegalStateException(context + " doit implémenter Notifiable");
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -59,6 +75,7 @@ public class Screen1Fragment extends Fragment {
         RatingBar incidentRating = view.findViewById(R.id.incidentRating);
         View descriptionHeader = view.findViewById(R.id.descriptionHeader);
         EditText incidentDescription = view.findViewById(R.id.incidentDescription);
+        View incidentPhotoSection = view.findViewById(R.id.incidentPhotoSection);
 
         if (incident == null) {
             incidentType.setText("Aucun incident sélectionné");
@@ -69,6 +86,7 @@ public class Screen1Fragment extends Fragment {
             incidentRating.setVisibility(View.GONE);
             descriptionHeader.setVisibility(View.GONE);
             incidentDescription.setVisibility(View.GONE);
+            incidentPhotoSection.setVisibility(View.GONE);
 
             return view;
         }
@@ -79,8 +97,69 @@ public class Screen1Fragment extends Fragment {
         incidentGps.setText("GPS : " + formatCoordinates(incident));
         incidentRating.setRating(incident.getStatus());
         incidentDescription.setText(incident.getDescription());
+        setupCameraFragment();
+        displayIncidentPicture();
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (incident != null) {
+            incident.addObserver(this);
+            displayIncidentPicture();
+
+            if (notifiable != null) {
+                notifiable.onDataChange(FRAGMENT_ID, incident, ACTION_INCIDENT_DISPLAYED, null);
+            }
+        }
+    }
+
+    @Override
+    public void onStop() {
+        if (incident != null) {
+            incident.removeObserver(this);
+        }
+
+        super.onStop();
+    }
+
+    @Override
+    public void onDetach() {
+        notifiable = null;
+        super.onDetach();
+    }
+
+    @Override
+    public void onStatusChanged(Incident incident) {
+    }
+
+    @Override
+    public void onPriorityChanged(Incident incident) {
+    }
+
+    @Override
+    public void onPictureChanged(Incident incident) {
+        displayIncidentPicture();
+    }
+
+    private void setupCameraFragment() {
+        if (getChildFragmentManager().findFragmentById(R.id.cameraFragmentContainer) != null) {
+            return;
+        }
+
+        getChildFragmentManager()
+                .beginTransaction()
+                .replace(R.id.cameraFragmentContainer, new CameraFragment())
+                .commit();
+    }
+
+    private void displayIncidentPicture() {
+        Bundle result = new Bundle();
+        result.putString(CameraFragment.BUNDLE_PICTURE_PATH, incident == null ? null : incident.getPicture());
+        getChildFragmentManager().setFragmentResult(CameraFragment.REQUEST_DISPLAY_PICTURE, result);
     }
 
     private String formatDistance(double distanceKm) {

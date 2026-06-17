@@ -25,6 +25,11 @@ public final class EmergencyService implements IssueObserver {
         Log.d(TAG, "Changement de priorité : " + getIncidentLabel(incident));
     }
 
+    @Override
+    public void onPictureChanged(Incident incident) {
+        Log.d(TAG, "Photo modifiée : " + getIncidentLabel(incident));
+    }
+
     private String getIncidentLabel(Incident incident) {
         if (incident.getVehiculeType() == null) {
             return incident.getAdresse();

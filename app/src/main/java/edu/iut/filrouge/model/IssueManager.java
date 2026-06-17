@@ -59,6 +59,15 @@ public class IssueManager implements ModelObservable {
         notifyObservers();
     }
 
+    public void setPicture(Incident incident, String picture) {
+        if (incident == null) {
+            return;
+        }
+
+        incident.setPicture(picture);
+        notifyObservers();
+    }
+
     private Incident createWithLocation(IncidentFactory factory, String adresse, String description,
                                         double distanceKm, double latitude, double longitude) {
         Incident incident = factory.createIncident(adresse, description, latitude, longitude);
