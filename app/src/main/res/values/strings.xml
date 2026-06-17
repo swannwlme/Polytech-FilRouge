@@ -23,6 +23,11 @@
     <string name="camera_permission_negative">Annuler</string>
     <string name="camera_capture_failed">La photo n’a pas été enregistrée.</string>
     <string name="camera_file_error">Impossible de préparer le fichier photo.</string>
+    <string name="notification_channel_id" translatable="false">incident_notifications</string>
+    <string name="notification_channel_name">Alertes incident</string>
+    <string name="notification_channel_description">Notifications reçues depuis Firebase Cloud Messaging.</string>
+    <string name="notification_default_title">FilRouge</string>
+    <string name="notification_default_body">Nouveau message reçu.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
