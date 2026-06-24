@@ -1,8 +1,10 @@
 package edu.iut.filrouge.view;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.util.Log;
@@ -17,10 +19,11 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import edu.iut.filrouge.R;
 import edu.iut.filrouge.controller.Notifiable;
@@ -35,6 +38,7 @@ import edu.iut.filrouge.model.VoitureIncidentFactory;
 public class Screen3Fragment extends Fragment {
 
     private static final String TAG = "Screen3Fragment";
+    private static final String SPEECH_LANGUAGE_TAG = "fr-FR";
 
     public static final int FRAGMENT_ID = 2;
     public static final int ACTION_INCIDENT_REPORTED = 0;
@@ -48,6 +52,17 @@ public class Screen3Fragment extends Fragment {
     private ImageButton truckButton;
     private EditText descriptionInput;
     private EditText currentTargetEditText;
+
+    private final ActivityResultLauncher<String> microphonePermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            granted -> {
+                if (granted) {
+                    launchVoiceRecognition();
+                } else {
+                    showVoicePermissionDeniedDialog();
+                }
+            }
+    );
 
     private final ActivityResultLauncher<Intent> voiceLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -180,15 +195,50 @@ public class Screen3Fragment extends Fragment {
     private void startVoiceRecognition(EditText target) {
         currentTargetEditText = target;
 
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.RECORD_AUDIO)
+                == PackageManager.PERMISSION_GRANTED) {
+            launchVoiceRecognition();
+            return;
+        }
+
+        if (shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO)) {
+            showVoicePermissionRationaleDialog();
+        } else {
+            microphonePermissionLauncher.launch(Manifest.permission.RECORD_AUDIO);
+        }
+    }
+
+    private void showVoicePermissionRationaleDialog() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle(R.string.voice_permission_title)
+                .setMessage(R.string.voice_permission_message)
+                .setPositiveButton(R.string.voice_permission_positive,
+                        (dialog, which) -> microphonePermissionLauncher.launch(Manifest.permission.RECORD_AUDIO))
+                .setNegativeButton(R.string.voice_permission_negative, null)
+                .show();
+    }
+
+    private void showVoicePermissionDeniedDialog() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle(R.string.voice_permission_title)
+                .setMessage(R.string.voice_permission_denied)
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
+    }
+
+    private void launchVoiceRecognition() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Parlez pour remplir le champ...");
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, SPEECH_LANGUAGE_TAG);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, SPEECH_LANGUAGE_TAG);
+        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.incident_voice_prompt));
 
         try {
             voiceLauncher.launch(intent);
         } catch (Exception e) {
             Log.e(TAG, "Reconnaissance vocale non supportee sur cet appareil.", e);
+            Toast.makeText(requireContext(), R.string.incident_voice_unavailable, Toast.LENGTH_SHORT).show();
         }
     }
 

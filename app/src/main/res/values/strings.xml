@@ -7,6 +7,8 @@
     <string name="incident_vehicle_truck">Camion</string>
     <string name="incident_description_label">Description</string>
     <string name="incident_voice_description">Dicter la description</string>
+    <string name="incident_voice_prompt">Parlez pour remplir le champ...</string>
+    <string name="incident_voice_unavailable">La reconnaissance vocale n’est pas disponible sur cet appareil.</string>
     <string name="incident_location_label">Emplacement</string>
     <string name="incident_default_location">Emplacement non renseigné</string>
     <string name="incident_report_button">Signaler</string>
@@ -23,6 +25,11 @@
     <string name="camera_permission_negative">Annuler</string>
     <string name="camera_capture_failed">La photo n’a pas été enregistrée.</string>
     <string name="camera_file_error">Impossible de préparer le fichier photo.</string>
+    <string name="voice_permission_title">Autorisation micro</string>
+    <string name="voice_permission_message">Cette application a besoin du micro pour dicter la description de l’incident.</string>
+    <string name="voice_permission_denied">La dictée vocale ne peut pas démarrer sans autorisation micro.</string>
+    <string name="voice_permission_positive">Autoriser</string>
+    <string name="voice_permission_negative">Annuler</string>
     <string name="notification_channel_id" translatable="false">incident_notifications</string>
     <string name="notification_channel_name">Alertes incident</string>
     <string name="notification_channel_description">Notifications reçues depuis Firebase Cloud Messaging.</string>
